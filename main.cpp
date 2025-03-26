@@ -32,6 +32,60 @@ void Izpis_Stevil(const vector<unsigned char> &stevila) {
     }
 }
 
+// Funkcija, ki izvede Counting Sort po danem bitu in vrne urejen vrstni red indeksov
+void Counting_Sort(const vector<unsigned char> &stevila, vector<int> &urejeniIndeksi, int bitPozicija) {
+    size_t dolzina = stevila.size();
+    vector<int> stevec(2, 0); // Stevec za bite 0 in 1
+
+    // Prestejemo pojavitve vrednosti bitov (0 in 1)
+    for (size_t i = 0; i < dolzina; i++) {
+        int bitnaVrednost = (stevila[i] >> bitPozicija) & 1;
+        stevec[bitnaVrednost] = stevec[bitnaVrednost] + 1;
+    }
+
+    // Ustvarimo kumulativno vsoto za stabilno sortiranje
+    stevec[1] = stevec[1] + stevec[0];
+
+    // Vektor za shranjevanje novih urejenih indeksov
+    vector<int> noviUrejeniIndeksi(dolzina);
+
+    // Razvrstimo indekse stabilno po bitni vrednosti
+    for (int i = dolzina - 1; i >= 0; i--) {
+        int bitnaVrednost = (stevila[urejeniIndeksi[i]] >> bitPozicija) & 1;
+
+        stevec[bitnaVrednost] = stevec[bitnaVrednost] - 1;
+        int novIndeks = stevec[bitnaVrednost];
+        noviUrejeniIndeksi[novIndeks] = urejeniIndeksi[i];
+    }
+
+    // Posodobimo urejene indekse
+    urejeniIndeksi = noviUrejeniIndeksi;
+}
+
+void Binary_Radix_Sort(vector<unsigned char> &stevila) {
+    size_t dolzina = stevila.size();
+
+    // Inicializacija sortirane tabele indeksov (zacetni vrstni red)
+    vector<int> urejeniIndeksi(dolzina);
+    for (size_t i = 0; i < dolzina; i++) {
+        urejeniIndeksi[i] = i;
+    }
+
+    // Iteracija skozi vse bite od 0 do 7
+    for (int k = 0; k < 8; k++) {
+        Counting_Sort(stevila, urejeniIndeksi, k);
+    }
+
+    // Ustvarimo novo urejeno kopijo stevila glede na urejene indekse
+    vector<unsigned char> urejenaStevila(dolzina);
+    for (size_t i = 0; i < dolzina; i++) {
+        urejenaStevila[i] = stevila[urejeniIndeksi[i]];
+    }
+
+    // Kopiramo urejene elemente nazaj v stevila
+    stevila = urejenaStevila;
+}
+
 
 // Glavna funkcija
 int main(int argc, const char* argv[]) {
