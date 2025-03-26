@@ -71,6 +71,17 @@ void Binary_Radix_Sort(vector<unsigned char> &stevila) {
         urejeniIndeksi[i] = i;
     }
 
+    // Iteracija skozi vse bite od 0 do 7
+    for (int k = 0; k < 8; k++) {
+        Counting_Sort(stevila, urejeniIndeksi, k);
+    }
+
+    // Ustvarimo novo urejeno kopijo stevila glede na urejene indekse
+    vector<unsigned char> urejenaStevila(dolzina);
+    for (size_t i = 0; i < dolzina; i++) {
+        urejenaStevila[i] = stevila[urejeniIndeksi[i]];
+    }
+
     // Kopiramo urejene elemente nazaj v stevila
     stevila = urejenaStevila;
 }
