@@ -37,6 +37,26 @@ void Counting_Sort(const vector<unsigned char> &stevila, vector<int> &urejeniInd
     size_t dolzina = stevila.size();
     vector<int> stevec(2, 0); // Stevec za bite 0 in 1
 
+    // Prestejemo pojavitve vrednosti bitov (0 in 1)
+    for (size_t i = 0; i < dolzina; i++) {
+        int bitnaVrednost = (stevila[i] >> bitPozicija) & 1;
+        stevec[bitnaVrednost] = stevec[bitnaVrednost] + 1;
+    }
+
+    // Ustvarimo kumulativno vsoto za stabilno sortiranje
+    stevec[1] = stevec[1] + stevec[0];
+
+    // Vektor za shranjevanje novih urejenih indeksov
+    vector<int> noviUrejeniIndeksi(dolzina);
+
+    // Razvrstimo indekse stabilno po bitni vrednosti
+    for (int i = dolzina - 1; i >= 0; i--) {
+        int bitnaVrednost = (stevila[urejeniIndeksi[i]] >> bitPozicija) & 1;
+
+        stevec[bitnaVrednost] = stevec[bitnaVrednost] - 1;
+        int novIndeks = stevec[bitnaVrednost];
+        noviUrejeniIndeksi[novIndeks] = urejeniIndeksi[i];
+    }
 
     // Posodobimo urejene indekse
     urejeniIndeksi = noviUrejeniIndeksi;
