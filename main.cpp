@@ -62,6 +62,20 @@ void Counting_Sort(const vector<unsigned char> &stevila, vector<int> &urejeniInd
     urejeniIndeksi = noviUrejeniIndeksi;
 }
 
+void Binary_Radix_Sort(vector<unsigned char> &stevila) {
+    size_t dolzina = stevila.size();
+
+    // Inicializacija sortirane tabele indeksov (zacetni vrstni red)
+    vector<int> urejeniIndeksi(dolzina);
+    for (size_t i = 0; i < dolzina; i++) {
+        urejeniIndeksi[i] = i;
+    }
+
+    // Kopiramo urejene elemente nazaj v stevila
+    stevila = urejenaStevila;
+}
+
+
 // Glavna funkcija
 int main(int argc, const char* argv[]) {
     if (argc < 2) {
