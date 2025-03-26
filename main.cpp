@@ -32,6 +32,15 @@ void Izpis_Stevil(const vector<unsigned char> &stevila) {
     }
 }
 
+// Funkcija, ki izvede Counting Sort po danem bitu in vrne urejen vrstni red indeksov
+void Counting_Sort(const vector<unsigned char> &stevila, vector<int> &urejeniIndeksi, int bitPozicija) {
+    size_t dolzina = stevila.size();
+    vector<int> stevec(2, 0); // Stevec za bite 0 in 1
+
+
+    // Posodobimo urejene indekse
+    urejeniIndeksi = noviUrejeniIndeksi;
+}
 
 // Glavna funkcija
 int main(int argc, const char* argv[]) {
