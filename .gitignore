@@ -1,0 +1,6 @@
+/actions-runner/
+/cmake-build-debug/
+/out.txt
+*.o
+*.exe
+*.bin
