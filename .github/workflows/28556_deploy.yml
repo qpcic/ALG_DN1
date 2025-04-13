@@ -9,11 +9,18 @@ jobs:
   deploy:
     name: Docker build & push
     runs-on: self-hosted
-    needs: pozeni-teste  # Zaženi samo če testi uspejo
 
     steps:
       - name: Kloniraj repozitorij
         uses: actions/checkout@v3
+
+      - name: Preveri ali obstaja napaka.txt
+        run: |
+          if [ -f napaka.txt ]; then
+            echo "Deploy ustavljen – testi niso uspešno zaključeni."
+            cat napaka.txt
+            exit 1
+          fi
 
       - name: Prijava v DockerHub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
