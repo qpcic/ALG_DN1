@@ -28,7 +28,7 @@ jobs:
             echo "napaka_obstaja=false" >> $GITHUB_OUTPUT
           fi
 
-    pozeni-teste:
+  pozeni-teste:
     name: Poženi teste (če ni napake)
     needs: preveri-teste
     if: needs.preveri-teste.outputs.napaka_obstaja == 'false'
