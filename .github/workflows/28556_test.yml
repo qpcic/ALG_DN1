@@ -46,7 +46,7 @@ jobs:
         run: sudo apt update && sudo apt install -y build-essential clang
 
       - name: Prevedi test z ${{ matrix.compiler }}
-        run: ${{ matrix.compiler }} test_radix_sort.cpp -o test_exec
+        run: ${{ matrix.compiler }} test_radix_sort.cpp radix_sort.cpp -o test_exec
 
       - name: Zaženi test
         run: ./test_exec
