@@ -15,6 +15,9 @@ jobs:
       - name: Kloniraj repozitorij
         uses: actions/checkout@v3
 
+      - name: Debug – izpiši vsebino repozitorija
+        run: ls -l
+
       - name: Preveri testno datoteko
         id: preveri
         run: |
@@ -24,14 +27,6 @@ jobs:
           else
             echo "napaka_obstaja=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Shrani napako kot artefakt (če obstaja)
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: napaka
-          path: napaka.txt
-          if-no-files-found: ignore
 
   pozeni-teste:
     name: Poženi teste (če ni napake)
