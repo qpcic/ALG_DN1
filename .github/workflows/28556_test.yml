@@ -18,8 +18,8 @@ jobs:
       - name: Preveri testno datoteko
         id: preveri
         run: |
-          if [ ! -f "test_radix_sort.cpp" ]; then
-            echo "Testna datoteka ne obstaja!" > napaka.txt
+          if [ ! -f "${{ github.workspace }}/test_radix_sort.cpp" ]; then
+            echo "Testna datoteka ne obstaja!" > "${{ github.workspace }}/napaka.txt"
             echo "napaka_obstaja=true" >> $GITHUB_OUTPUT
           else
             echo "napaka_obstaja=false" >> $GITHUB_OUTPUT
@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: napaka
-          path: napaka.txt
+          path: ${{ github.workspace }}/napaka.txt
           if-no-files-found: ignore
 
   pozeni-teste:
@@ -42,21 +42,18 @@ jobs:
       - name: Kloniraj repozitorij
         uses: actions/checkout@v3
 
-      - name: Prenesi napako.txt
+      - name: Prenesi napaka.txt
         uses: actions/download-artifact@v3
         with:
           name: napaka
         continue-on-error: true
 
       - name: Preveri vsebino napaka.txt
-        id: preveri-napako
         run: |
           if [ -f napaka.txt ]; then
-            echo "Najdena napaka:"
+            echo "CI PREKLICAN – najdena napaka:"
             cat napaka.txt
             exit 1
-          else
-            echo "Ni napake, nadaljujemo s testiranjem."
           fi
 
       - name: Namesti build orodja
