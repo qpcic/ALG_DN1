@@ -15,9 +15,6 @@ jobs:
       - name: Kloniraj repozitorij
         uses: actions/checkout@v3
 
-      - name: Debug – izpiši vsebino repozitorija
-        run: ls -l
-
       - name: Preveri testno datoteko
         id: preveri
         run: |
@@ -28,25 +25,51 @@ jobs:
             echo "napaka_obstaja=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Shrani napako kot artefakt (če obstaja)
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: napaka
+          path: napaka.txt
+          if-no-files-found: ignore
+
   pozeni-teste:
     name: Poženi teste (če ni napake)
     needs: preveri-teste
-    if: needs.preveri-teste.outputs.napaka_obstaja == 'false'
     runs-on: self-hosted
-
-    strategy:
-      matrix:
-        compiler: [g++, clang++]
 
     steps:
       - name: Kloniraj repozitorij
         uses: actions/checkout@v3
 
+      - name: Prenesi napako.txt
+        uses: actions/download-artifact@v3
+        with:
+          name: napaka
+        continue-on-error: true
+
+      - name: Preveri vsebino napaka.txt
+        id: preveri-napako
+        run: |
+          if [ -f napaka.txt ]; then
+            echo "Najdena napaka:"
+            cat napaka.txt
+            exit 1
+          else
+            echo "Ni napake, nadaljujemo s testiranjem."
+          fi
+
       - name: Namesti build orodja
         run: sudo apt update && sudo apt install -y build-essential clang
 
-      - name: Prevedi test z ${{ matrix.compiler }}
-        run: ${{ matrix.compiler }} test_radix_sort.cpp radix_sort.cpp -o test_exec
+      - name: Prevedi test z g++
+        run: g++ test_radix_sort.cpp radix_sort.cpp -o test_exec
 
-      - name: Zaženi test
+      - name: Prevedi test z clang++
+        run: clang++ test_radix_sort.cpp radix_sort.cpp -o test_exec_clang
+
+      - name: Zaženi test z g++
         run: ./test_exec
+
+      - name: Zaženi test z clang++
+        run: ./test_exec_clang
