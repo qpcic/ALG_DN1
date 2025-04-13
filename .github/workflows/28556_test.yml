@@ -28,7 +28,7 @@ jobs:
             echo "napaka_obstaja=false" >> $GITHUB_OUTPUT
           fi
 
-  pozeni-teste:
+    pozeni-teste:
     name: Poženi teste (če ni napake)
     needs: preveri-teste
     if: needs.preveri-teste.outputs.napaka_obstaja == 'false'
@@ -46,7 +46,7 @@ jobs:
         run: sudo apt update && sudo apt install -y build-essential clang
 
       - name: Prevedi test z ${{ matrix.compiler }}
-        run: ${{ matrix.compiler }} test_radix_sort.cpp main.cpp -o test_exec
+        run: ${{ matrix.compiler }} test_radix_sort.cpp -o test_exec
 
       - name: Zaženi test
         run: ./test_exec
