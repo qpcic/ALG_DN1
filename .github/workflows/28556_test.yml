@@ -27,7 +27,7 @@ jobs:
 
       - name: Shrani napako kot artefakt (če obstaja)
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: napaka
           path: napaka.txt
